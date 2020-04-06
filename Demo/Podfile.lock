@@ -1,0 +1,34 @@
+PODS:
+  - KeychainSwift (19.0.0)
+  - KeyValueStorage (1.0.0):
+    - KeychainSwift (= 19.0.0)
+  - KeyValueStorage/Tests (1.0.0):
+    - KeychainSwift (= 19.0.0)
+    - Nimble (= 8.0.7)
+    - Quick (= 2.2.0)
+  - Nimble (8.0.7)
+  - Quick (2.2.0)
+
+DEPENDENCIES:
+  - KeyValueStorage (from `../`)
+  - KeyValueStorage/Tests (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - KeychainSwift
+    - Nimble
+    - Quick
+
+EXTERNAL SOURCES:
+  KeyValueStorage:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
+  KeyValueStorage: 1791444d07cf386e926b67d460fd244b8b2b7bc9
+  Nimble: a73af6ecd4c9106f434f3d55fc54570be3739e0b
+  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
+
+PODFILE CHECKSUM: 0fb8bc10286fbd1af8ddc30a23ad9cb68af64af8
+
+COCOAPODS: 1.8.4
