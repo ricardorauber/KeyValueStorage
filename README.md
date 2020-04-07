@@ -33,7 +33,7 @@ You might be asking why another framework for this kind of feature? It's because
 
 If you are using CocoaPods, add this to your Podfile and run `pod install`.
 
-```Swift
+```Ruby
 target 'Your target name' do
     pod 'KeyValueStorage', '~> 1.0'
 end
