@@ -1,5 +1,7 @@
 # A key-value storage module for Swift projects
 
+[![Build Status](https://travis-ci.com/ricardorauber/KeyValueStorage.svg?branch=master)](http://travis-ci.com/)
+
 This module is a simple wrapper for key-value storage frameworks like:
 
 - Keychain
