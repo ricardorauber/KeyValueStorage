@@ -1,6 +1,9 @@
 # A key-value storage module for Swift projects
 
 [![Build Status](https://travis-ci.com/ricardorauber/KeyValueStorage.svg?branch=master)](http://travis-ci.com/)
+[![CocoaPods Version](https://img.shields.io/cocoapods/v/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
+[![License](https://img.shields.io/cocoapods/l/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
+[![Platform](https://img.shields.io/cocoapods/p/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
 
 This module is a simple wrapper for key-value storage frameworks like:
 
