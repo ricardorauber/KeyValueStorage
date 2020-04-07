@@ -3,14 +3,34 @@ public protocol KeyValueStorage {
 	
 	// MARK: - Data
 	
+	/// Sets a data value into the storage
+	///
+	/// - Parameters:
+	///   - data: Value
+	///   - key: Key
+	/// - Returns: Confirmation
 	@discardableResult
 	func set(data: Data, for key: StorageKey) -> Bool
 	
+	/// Sets a data value into the storage
+	///
+	/// - Parameters:
+	///   - data: Value
+	///   - key: Key
+	/// - Returns: Confirmation
 	@discardableResult
 	func set(data: Data, for key: String) -> Bool
 	
+	/// Returns a data value from the storage
+	///
+	/// - Parameter key: Key
+	/// - Returns: Value if found
 	func getData(for key: StorageKey) -> Data?
 	
+	/// Returns a data value from the storage
+	///
+	/// - Parameter key: Key
+	/// - Returns: Value if found
 	func getData(for key: String) -> Data?
 	
 	// MARK: - String
