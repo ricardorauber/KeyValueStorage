@@ -18,6 +18,31 @@ public class UserDefaultsKeyValueStorage {
 // MARK: - KeyValueStorage
 extension UserDefaultsKeyValueStorage: KeyValueStorage {
 	
+	// MARK: - Data
+	
+	@discardableResult
+	public func set(data: Data, for key: StorageKey) -> Bool {
+		return set(data: data, for: key.rawValue)
+	}
+	
+	@discardableResult
+	public func set(data: Data, for key: String) -> Bool {
+		lock.lock()
+		defer { lock.unlock() }
+		storage.set(data, forKey: key)
+		return true
+	}
+	
+	public func getData(for key: StorageKey) -> Data? {
+		return getData(for: key.rawValue)
+	}
+	
+	public func getData(for key: String) -> Data? {
+		lock.lock()
+		defer { lock.unlock() }
+		return storage.data(forKey: key)
+	}
+	
 	// MARK: - String
 	
 	@discardableResult

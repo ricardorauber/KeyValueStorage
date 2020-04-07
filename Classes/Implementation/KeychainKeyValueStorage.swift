@@ -1,21 +1,86 @@
-import KeychainSwift
+import Security
 
 /// Implementation of the KeyValueStorage protocol using Keychain
 public class KeychainKeyValueStorage {
 	
-	let storage: KeychainSwift
+	let access: CFString
+	let synchronizable: Bool
+	let lock = NSLock()
 	
 	// MARK: - Initialization
 	
 	/// Creates a new instance of the KeychainKeyValueStorage
-	/// - Parameter storage: A KeychainSwift instance or nil for a new one
-	public init(storage: KeychainSwift? = nil) {
-		self.storage = storage ?? KeychainSwift()
+	/// - Parameter access: Type of access, defaults to Accessible When Unlocked
+	/// - Parameter synchronizable: Specify if it should synchronize between devices
+	public init(access: CFString? = nil, synchronizable: Bool? = nil) {
+		self.access = access ?? kSecAttrAccessibleWhenUnlocked
+		self.synchronizable = synchronizable ?? false
+	}
+	
+	// MARK: - Features
+	
+	func addSynchronizable(_ query: [CFString: Any], isAdding: Bool = false) -> [CFString: Any] {
+		var query = query
+		if synchronizable {
+			query[kSecAttrSynchronizable] = isAdding ? true : kSecAttrSynchronizableAny
+		}
+		return query
 	}
 }
 
 // MARK: - KeyValueStorage
 extension KeychainKeyValueStorage: KeyValueStorage {
+	
+	// MARK: - Data
+	
+	@discardableResult
+	public func set(data: Data, for key: StorageKey) -> Bool {
+		return set(data: data, for: key.rawValue)
+	}
+	
+	@discardableResult
+	public func set(data: Data, for key: String) -> Bool {
+		remove(key: key)
+		lock.lock()
+		defer { lock.unlock() }
+		
+		var query: [CFString: Any] = [
+			kSecClass: kSecClassGenericPassword,
+			kSecAttrAccount: key,
+			kSecValueData: data,
+			kSecAttrAccessible: access
+		]
+		
+		query = addSynchronizable(query, isAdding: true)
+		return SecItemAdd(query as CFDictionary, nil) == noErr
+	}
+	
+	public func getData(for key: StorageKey) -> Data? {
+		return getData(for: key.rawValue)
+	}
+	
+	public func getData(for key: String) -> Data? {
+		lock.lock()
+		defer { lock.unlock() }
+		
+		var query: [CFString: Any] = [
+			kSecClass: kSecClassGenericPassword,
+			kSecAttrAccount: key,
+			kSecMatchLimit: kSecMatchLimitOne,
+			kSecReturnData: kCFBooleanTrue as Any
+		]
+		query = addSynchronizable(query)
+		
+		var dataFound: AnyObject?
+		let result = withUnsafeMutablePointer(to: &dataFound) {
+			SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+		}
+		
+		if result == noErr {
+			return dataFound as? Data
+		}
+		return nil
+	}
 	
 	// MARK: - String
 	
@@ -26,7 +91,7 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	
 	@discardableResult
 	public func set(string: String, for key: String) -> Bool {
-		return storage.set(string, forKey: key)
+		return set(data: Data(string.utf8), for: key)
 	}
 	
 	public func getString(for key: StorageKey) -> String? {
@@ -34,7 +99,10 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	}
 	
 	public func getString(for key: String) -> String? {
-		return storage.get(key)
+		if let data = getData(for: key) {
+			return String(data: data, encoding: .utf8)
+		}
+		return nil
 	}
 	
 	// MARK: - Int
@@ -46,7 +114,7 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	
 	@discardableResult
 	public func set(int: Int, for key: String) -> Bool {
-		return storage.set("\(int)", forKey: key)
+		return set(string: "\(int)", for: key)
 	}
 	
 	public func getInt(for key: StorageKey) -> Int? {
@@ -54,7 +122,7 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	}
 	
 	public func getInt(for key: String) -> Int? {
-		if let value = storage.get(key) {
+		if let value = getString(for: key) {
 			return Int(value)
 		}
 		return nil
@@ -69,7 +137,7 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	
 	@discardableResult
 	public func set(double: Double, for key: String) -> Bool {
-		return storage.set("\(double)", forKey: key)
+		return set(string: "\(double)", for: key)
 	}
 	
 	public func getDouble(for key: StorageKey) -> Double? {
@@ -77,7 +145,7 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	}
 	
 	public func getDouble(for key: String) -> Double? {
-		if let value = storage.get(key) {
+		if let value = getString(for: key) {
 			return Double(value)
 		}
 		return nil
@@ -92,7 +160,9 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	
 	@discardableResult
 	public func set(bool: Bool, for key: String) -> Bool {
-		return storage.set(bool, forKey: key)
+		let bytes: [UInt8] = bool ? [1] : [0]
+		let data = Data(bytes)
+		return set(data: data, for: key)
 	}
 	
 	public func getBool(for key: StorageKey) -> Bool? {
@@ -100,8 +170,8 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	}
 	
 	public func getBool(for key: String) -> Bool? {
-		if let value = storage.getBool(key) {
-			return value
+		if let data = getData(for: key), let firstBit = data.first {
+			return firstBit == 1
 		}
 		return nil
 	}
@@ -115,13 +185,24 @@ extension KeychainKeyValueStorage: KeyValueStorage {
 	
 	@discardableResult
 	public func remove(key: String) -> Bool {
-		storage.delete(key)
-		return true
+		lock.lock()
+		defer { lock.unlock() }
+		var query: [CFString: Any] = [
+			kSecClass: kSecClassGenericPassword,
+			kSecAttrAccount: key
+		]
+		query = addSynchronizable(query)
+		return SecItemDelete(query as CFDictionary) == noErr
 	}
 	
 	@discardableResult
 	public func clear() -> Bool {
-		storage.clear()
-		return true
+		lock.lock()
+		defer { lock.unlock() }
+		var query: [CFString: Any] = [
+			kSecClass: kSecClassGenericPassword
+		]
+		query = addSynchronizable(query)
+		return SecItemDelete(query as CFDictionary) == noErr
 	}
 }

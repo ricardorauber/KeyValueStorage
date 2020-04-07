@@ -1,6 +1,18 @@
 /// Protocol to implement Key-Value storage systems
 public protocol KeyValueStorage {
 	
+	// MARK: - Data
+	
+	@discardableResult
+	func set(data: Data, for key: StorageKey) -> Bool
+	
+	@discardableResult
+	func set(data: Data, for key: String) -> Bool
+	
+	func getData(for key: StorageKey) -> Data?
+	
+	func getData(for key: String) -> Data?
+	
 	// MARK: - String
 	
 	/// Sets a string value into the storage

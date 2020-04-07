@@ -15,6 +15,27 @@ public class MemoryKeyValueStorage {
 // MARK: - KeyValueStorage
 extension MemoryKeyValueStorage: KeyValueStorage {
 	
+	// MARK: - Data
+	
+	@discardableResult
+	public func set(data: Data, for key: StorageKey) -> Bool {
+		return set(data: data, for: key.rawValue)
+	}
+	
+	@discardableResult
+	public func set(data: Data, for key: String) -> Bool {
+		storage[key] = data
+		return true
+	}
+	
+	public func getData(for key: StorageKey) -> Data? {
+		return getData(for: key.rawValue)
+	}
+	
+	public func getData(for key: String) -> Data? {
+		return storage[key] as? Data
+	}
+	
 	// MARK: - String
 	
 	@discardableResult
