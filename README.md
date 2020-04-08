@@ -1,4 +1,4 @@
-# A key-value storage module for Swift projects
+# KeyValueStorage - A key-value storage module for Swift projects
 
 [![Build Status](https://travis-ci.com/ricardorauber/KeyValueStorage.svg?branch=master)](http://travis-ci.com/)
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
