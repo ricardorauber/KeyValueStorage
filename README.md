@@ -44,6 +44,10 @@ target 'Your target name' do
 end
 ```
 
+#### Manual Installation
+
+If you want to add it manually to your project, without a package manager, just copy all files from the `Classes` folder to your project.
+
 ## Usage
 
 Add `import KeyValueStorage` to your source code
