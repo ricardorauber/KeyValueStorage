@@ -50,7 +50,7 @@ If you want to add it manually to your project, without a package manager, just 
 
 ## Usage
 
-Add `import KeyValueStorage` to your source code
+Add `import KeyValueStorage` to your source code.
 
 #### Data values
 
