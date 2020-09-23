@@ -1,5 +1,5 @@
 target 'Demo' do
   platform :ios, '12.4'
-
   pod 'KeyValueStorage', :path => '../', :testspecs => ['Tests']
+  pod 'SwiftLint'
 end

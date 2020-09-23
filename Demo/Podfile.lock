@@ -1,29 +1,33 @@
 PODS:
-  - KeyValueStorage (1.0.0)
-  - KeyValueStorage/Tests (1.0.0):
-    - Nimble (= 8.0.7)
-    - Quick (= 2.2.0)
-  - Nimble (8.0.7)
-  - Quick (2.2.0)
+  - KeyValueStorage (2.0.0)
+  - KeyValueStorage/Tests (2.0.0):
+    - Nimble (= 8.1.2)
+    - Quick (= 3.0.0)
+  - Nimble (8.1.2)
+  - Quick (3.0.0)
+  - SwiftLint (0.40.3)
 
 DEPENDENCIES:
   - KeyValueStorage (from `../`)
   - KeyValueStorage/Tests (from `../`)
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
+    - SwiftLint
 
 EXTERNAL SOURCES:
   KeyValueStorage:
     :path: "../"
 
 SPEC CHECKSUMS:
-  KeyValueStorage: 430a4401e10091520b71733b6d60313c535163ed
-  Nimble: a73af6ecd4c9106f434f3d55fc54570be3739e0b
-  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
+  KeyValueStorage: 972e8299974ba254254faafe44a94b072b205e64
+  Nimble: 3864815b4703c7ebffba875973c70e854489fbae
+  Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
+  SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
 
-PODFILE CHECKSUM: 0fb8bc10286fbd1af8ddc30a23ad9cb68af64af8
+PODFILE CHECKSUM: 0d0ceb73a214bfcf550d89f963bb9c82b6c84fd9
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.0.beta.2

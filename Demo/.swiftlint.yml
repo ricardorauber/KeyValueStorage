@@ -1,0 +1,26 @@
+disabled_rules:
+  - conditional_returns_on_newline
+  - identifier_name
+  - nesting
+opt_in_rules:
+  - force_unwrapping
+  - closure_spacing
+  - conditional_returns_on_newline
+  - contains_over_first_not_nil
+  - empty_count
+  - empty_string
+  - fallthrough
+  - fatal_error_message
+  - first_where
+  - for_where
+  - literal_expression_end_indentation
+  - operator_usage_whitespace
+  - overridden_super_call
+  - private_action
+  - sorted_first_last
+  - unneeded_parentheses_in_closure_argument
+  - yoda_condition
+excluded:
+  - Pods
+line_length: 300
+reporter: "xcode"

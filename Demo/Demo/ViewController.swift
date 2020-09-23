@@ -1,180 +1,114 @@
 import UIKit
 import KeyValueStorage
 
-extension StorageKey {
-	static var dummy = StorageKey(rawValue: "dummy")
-}
-
 class ViewController: UIViewController {
-	
+
 	// MARK: - Properties
-	
-	let userDefaults: KeyValueStorage = UserDefaultsKeyValueStorage()
-	let keychain: KeyValueStorage = KeychainKeyValueStorage()
-	let memory: KeyValueStorage = MemoryKeyValueStorage()
-	
+
+	let storage: KeyValueStorageProtocol = KeyValueStorage()
+
 	// MARK: - IBOutlets
-	
-	@IBOutlet weak var storageTypeSegmentedControl: UISegmentedControl!
-	@IBOutlet weak var keyTextField: UITextField!
-	@IBOutlet weak var valueTextField: UITextField!
-	@IBOutlet weak var valueSwitch: UISwitch!
-	@IBOutlet weak var valueTypeSegmentedControl: UISegmentedControl!
-	
-	// MARK: - Life cycle
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		
-		print("--------------------")
-		print("KeyValueStorage Demo")
-		print("--------------------")
-		print("The best way to use this module is creating static vars in extensions for the StorageKey struct:\n")
-		print("extension StorageKey {")
-		print("    static var dummy = StorageKey(rawValue: \"dummy\")")
-		print("}")
-		print("memory.set(string: \"something awesome!\", for: .dummy)")
-		print("let dummyValue = memory.getString(for: .dummy)\n")
-		
-		memory.set(string: "something awesome!", for: .dummy)
-		let dummyValue = memory.getString(for: .dummy)
-		
-		print("As you can see, you can use type-safe code instead of strings:", dummyValue ?? "nil")
-	}
-	
+
+	@IBOutlet var storageTypeSegmentedControl: UISegmentedControl!
+	@IBOutlet var keyTextField: UITextField!
+	@IBOutlet var valueTextField: UITextField!
+	@IBOutlet var valueSwitch: UISwitch!
+	@IBOutlet var valueTypeSegmentedControl: UISegmentedControl!
+
 	// MARK: - IBActions
-	
-	@IBAction func setValueButtonTouchUpInside(_ sender: Any) {
-		guard let key = keyTextField.text else { return }
-		let value = valueTextField.text
-		switch(valueTypeSegmentedControl.selectedSegmentIndex) {
+
+	@IBAction private func setValueButtonTouchUpInside(_ sender: Any) {
+		guard let key = keyTextField.text, let value = valueTextField.text else { return }
+		switch valueTypeSegmentedControl.selectedSegmentIndex {
 		case 0:
-			set(string: value, key: key)
+			set(value: value, key: key)
 		case 1:
-			set(int: value, key: key)
+			set(value: Int(value), key: key)
 		case 2:
-			set(double: value, key: key)
+			set(value: Double(value), key: key)
 		default:
-			set(bool: valueSwitch.isOn, key: key)
+			set(value: valueSwitch.isOn, key: key)
 		}
 	}
-	
-	@IBAction func loadValueButtonTouchUpInside(_ sender: Any) {
+
+	@IBAction private func loadValueButtonTouchUpInside(_ sender: Any) {
 		guard let key = keyTextField.text else { return }
-		switch(valueTypeSegmentedControl.selectedSegmentIndex) {
+		switch valueTypeSegmentedControl.selectedSegmentIndex {
 		case 0:
-			loadString(key: key)
+            let value: String? = load(key: key)
+            print("Loaded value:", value ?? "-")
 		case 1:
-			loadInt(key: key)
+            let value: Int? = load(key: key)
+            print("Loaded value:", value ?? "-")
 		case 2:
-			loadDouble(key: key)
+            let value: Double? = load(key: key)
+            print("Loaded value:", value ?? "-")
 		default:
-			loadBool(key: key)
+            let value: Bool? = load(key: key)
+            print("Loaded value:", value ?? "-")
 		}
 	}
-	
-	@IBAction func removeKeyButtonTouchUpInside(_ sender: Any) {
+
+	@IBAction private func removeKeyButtonTouchUpInside(_ sender: Any) {
 		guard let key = keyTextField.text else { return }
 		remove(key: key)
 	}
-	
-	@IBAction func clearStorageButtonTouchUpInside(_ sender: Any) {
+
+	@IBAction private func clearStorageButtonTouchUpInside(_ sender: Any) {
 		clear()
 	}
-	
-	@IBAction func valueTypeSegmentedControlValueChanged(_ sender: Any) {
+
+	@IBAction private func valueTypeSegmentedControlValueChanged(_ sender: Any) {
 		valueTextField.isHidden = valueTypeSegmentedControl.selectedSegmentIndex >= 3
 		valueSwitch.isHidden = valueTypeSegmentedControl.selectedSegmentIndex < 3
 	}
-	
+
 	// MARK: - Features
-	
-	func chooseStorage() -> KeyValueStorage {
-		switch(storageTypeSegmentedControl.selectedSegmentIndex) {
+
+	func chooseStorage() -> KeyValueStorageType {
+		switch storageTypeSegmentedControl.selectedSegmentIndex {
 		case 0:
-			return userDefaults
+            return .defaults
 		case 1:
-			return keychain
+            return .keychain
 		default:
-			return memory
+            return .memory
 		}
 	}
-	
-	func set(string: Any?, key: String) {
-		guard let value = string as? String else { return }
-		let storage = chooseStorage()
-		storage.set(string: value, for: key)
-	}
-	
-	func set(int: Any?, key: String) {
-		guard let int = int as? String, let value = Int(int) else { return }
-		let storage = chooseStorage()
-		storage.set(int: value, for: key)
-	}
-	
-	func set(double: Any?, key: String) {
-		guard let double = double as? String, let value = Double(double) else { return }
-		let storage = chooseStorage()
-		storage.set(double: value, for: key)
-	}
-	
-	func set(bool: Bool, key: String) {
-		let storage = chooseStorage()
-		storage.set(bool: bool, for: key)
-	}
-	
-	func loadString(key: String) {
-		let storage = chooseStorage()
-		if let value = storage.getString(for: key) {
-			valueTextField.text = value
-		} else {
-			valueTextField.text = ""
-		}
-		valueSwitch.isOn = false
-	}
-	
-	func loadInt(key: String) {
-		let storage = chooseStorage()
-		if let value = storage.getInt(for: key) {
-			valueTextField.text = "\(value)"
-		} else {
-			valueTextField.text = ""
-		}
-		valueSwitch.isOn = false
-	}
-	
-	func loadDouble(key: String) {
-		let storage = chooseStorage()
-		if let value = storage.getDouble(for: key) {
-			valueTextField.text = "\(value)"
-		} else {
-			valueTextField.text = ""
-		}
-		valueSwitch.isOn = false
-	}
-	
-	func loadBool(key: String) {
-		let storage = chooseStorage()
-		if let value = storage.getBool(for: key) {
-			valueSwitch.isOn = value
-			valueTextField.isHidden = true
-			valueSwitch.isHidden = false
-		}
-		valueTextField.text = ""
-	}
-	
+
+    func set<Type: Codable>(value: Type, key: String) {
+        let storageType = chooseStorage()
+        let storageKey = KeyValueStorageKey(type: storageType, value: key)
+        storage.set(value: value, for: storageKey)
+    }
+
+    func load<Type: Codable>(key: String) -> Type? {
+        let storageType = chooseStorage()
+        let storageKey = KeyValueStorageKey(type: storageType, value: key)
+        valueTextField.text = ""
+        valueSwitch.isOn = false
+        if let value: Type = storage.get(key: storageKey) {
+            if let isOn = value as? Bool {
+                valueSwitch.isOn = isOn
+                return value
+            }
+            valueTextField.text = String(describing: value)
+            return value
+        }
+        return nil
+    }
+
 	func remove(key: String) {
-		let storage = chooseStorage()
-		storage.remove(key: key)
+        let storageType = chooseStorage()
+        let storageKey = KeyValueStorageKey(type: storageType, value: key)
+		storage.remove(key: storageKey)
 		valueSwitch.isOn = false
 		valueTextField.text = ""
 	}
-	
+
 	func clear() {
-		let storage = chooseStorage()
-		storage.clear()
+		storage.cleanAll()
 		valueSwitch.isOn = false
 		valueTextField.text = ""
 	}
 }
-

@@ -14,6 +14,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3F91F8CDF5F68F7961359A28741F6C82"
+               BuildableName = "libKeyValueStorage.a"
+               BlueprintName = "KeyValueStorage"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "479D2923243BAAEE000BF2F9"
                BuildableName = "Demo.app"
                BlueprintName = "Demo"
@@ -41,6 +55,7 @@
       <Testables>
          <TestableReference
             skipped = "NO"
+            parallelizable = "YES"
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
