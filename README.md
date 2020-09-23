@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
 [![Platform](https://img.shields.io/cocoapods/p/KeyValueStorage.svg?style=flat)](http://cocoadocs.org/docsets/KeyValueStorage)
 
-This module is a simple wrapper for key-value storage frameworks like:
+This module is an ultra-light wrapper for key-value storage frameworks like:
 
 - Keychain
 - User Defaults
@@ -22,7 +22,7 @@ let value: String? = storage.get(key: myKey)
 print(value)
 ```
 
-Nice, right? What about the others? Well, you can easily create a key fo any of the sotrage types:
+Nice, right? What about the others? Well, you can easily create a key for any of the storage types:
 
 ```Swift
 let keychainKey = KeyValueStorageKey(type: .keychain, value: "myKey")
@@ -32,7 +32,7 @@ let memoryKey = KeyValueStorageKey(type: .memory, value: "myKey")
 
 ## Why?
 
-You might be asking why another framework for this kind of feature? It's because all the storage frameworks are together? No, not only for that. Actually, this framework has a bigger purpose, it is completely based on the `KeyValueStorageProtocol` protocol which provides testability for your app. The way to do it is using the protocol on parameters and properties so you could inject dependencies for different behaviours. You can use the one in the package or implement a mock to avoid some issues on the tests.
+You might be asking why another framework for this kind of feature? It's because all the storage frameworks are together? No, not only for that. Actually, this framework has a bigger purpose, it is completely based on the `KeyValueStorageProtocol` which provides testability for your app. The way to do it is using the protocol on parameters and properties so you could inject dependencies for different behaviours. You can use the one in the package or implement a mock to avoid some issues on the tests, for instance.
 
 ## Setup
 
