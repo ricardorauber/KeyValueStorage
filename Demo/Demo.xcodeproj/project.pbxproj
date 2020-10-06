@@ -17,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		13B9A583251BF76A001F9FFE /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		13CBD105252CFB0500C7796C /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
 		1D47556C82553C978B999411 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		479D2924243BAAEE000BF2F9 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		479D2927243BAAEE000BF2F9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +45,7 @@
 		479D291B243BAAEE000BF2F9 = {
 			isa = PBXGroup;
 			children = (
+				13CBD105252CFB0500C7796C /* .travis.yml */,
 				13B9A583251BF76A001F9FFE /* .swiftlint.yml */,
 				479D2926243BAAEE000BF2F9 /* Demo */,
 				479D2925243BAAEE000BF2F9 /* Products */,
